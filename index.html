@@ -1,38 +1,105 @@
 
+"use strict";
+
+// ======================================
+// CONFIGURATION
+// ======================================
+
 const RECRUITMENT_API_URL =
   "https://mcdonalds-belle-roche.wispbyte.app/candidature";
 
-const form = document.getElementById("recruitmentForm");
-const result = document.getElementById("recruitmentResult");
+// ======================================
+// RÉCUPÉRATION DES ÉLÉMENTS HTML
+// ======================================
 
-if (!form || !result) {
-  console.error("Formulaire ou zone de résultat introuvable.");
-} else {
-  const submitButton = form.querySelector('button[type="submit"]');
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("recruitmentForm");
+  const result = document.getElementById("recruitmentResult");
+
+  if (!form || !result) {
+    console.error(
+      "Erreur : formulaire ou zone de résultat introuvable."
+    );
+    return;
+  }
+
+  const submitButton = form.querySelector(
+    'button[type="submit"], input[type="submit"]'
+  );
+
+  if (!submitButton) {
+    console.error("Erreur : bouton d'envoi introuvable.");
+    return;
+  }
+
+  // ======================================
+  // ENVOI DU FORMULAIRE
+  // ======================================
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    if (submitButton.disabled) return;
 
     if (!form.reportValidity()) return;
 
     const data = new FormData(form);
 
+    // Récupération des informations
     const candidature = {
       prenom: String(data.get("prenom") || "").trim(),
       nom: String(data.get("nom") || "").trim(),
       email: String(data.get("email") || "").trim(),
       poste: String(data.get("poste") || "").trim(),
-      disponibilites: String(data.get("disponibilites") || "").trim(),
+      disponibilites: String(
+        data.get("disponibilites") || ""
+      ).trim(),
       motivation: String(data.get("motivation") || "").trim()
     };
 
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = "Envoi en cours...";
+    // Vérification des champs
+    const requiredFields = [
+      "prenom",
+      "nom",
+      "email",
+      "poste",
+      "disponibilites",
+      "motivation"
+    ];
+
+    for (const field of requiredFields) {
+      if (!candidature[field]) {
+        result.style.color = "#a33";
+        result.textContent =
+          "Merci de remplir tous les champs obligatoires.";
+        return;
+      }
     }
 
+    // Vérification de l'adresse email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(candidature.email)) {
+      result.style.color = "#a33";
+      result.textContent =
+        "Merci de renseigner une adresse email valide.";
+      return;
+    }
+
+    // ======================================
+    // ÉTAT DE CHARGEMENT
+    // ======================================
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Envoi en cours...";
+
     result.style.color = "#333";
-    result.textContent = "Transmission de votre candidature...";
+    result.textContent =
+      "Transmission de votre candidature...";
+
+    // ======================================
+    // REQUÊTE VERS WISBYTE
+    // ======================================
 
     try {
       const response = await fetch(RECRUITMENT_API_URL, {
@@ -51,24 +118,54 @@ if (!form || !result) {
         );
       }
 
+      if (!answer.success) {
+        throw new Error(
+          answer.message || "La candidature n'a pas été confirmée."
+        );
+      }
+
+      // ======================================
+      // SUCCÈS
+      // ======================================
+
+      form.reset();
+
       result.style.color = "#27633b";
       result.textContent =
         "Votre candidature a été envoyée avec succès !";
 
-      form.reset();
+      console.log("Candidature envoyée avec succès.");
 
     } catch (error) {
-      console.error("Erreur de candidature :", error);
+
+      // ======================================
+      // ERREUR
+      // ======================================
+
+      console.error(
+        "Erreur lors de l'envoi de la candidature :",
+        error
+      );
 
       result.style.color = "#a33";
-      result.textContent =
-        error.message || "Impossible de contacter le serveur.";
+
+      if (error instanceof TypeError) {
+        result.textContent =
+          "Impossible de contacter le serveur. Vérifiez votre connexion et le fonctionnement de l'API.";
+      } else {
+        result.textContent =
+          error.message || "Une erreur est survenue.";
+      }
 
     } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = "Envoyer ma candidature";
-      }
+
+      // ======================================
+      // RÉACTIVATION DU BOUTON
+      // ======================================
+
+      submitButton.disabled = false;
+      submitButton.textContent =
+        "Envoyer ma candidature";
     }
   });
-}
+});
