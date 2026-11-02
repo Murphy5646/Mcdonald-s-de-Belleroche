@@ -1,5 +1,6 @@
 
-const RECRUITMENT_API_URL = "https://mcdonalds-belle-roche.wispbyte.app:11024/candidature";
+const RECRUITMENT_API_URL =
+    "https://mcdonalds-belle-roche.wispbyte.app:11024/candidature";
 
 const form = document.getElementById("recruitmentForm");
 const result = document.getElementById("recruitmentResult");
@@ -28,9 +29,7 @@ form.addEventListener("submit", async (event) => {
     try {
         const response = await fetch(RECRUITMENT_API_URL, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(candidature)
         });
 
