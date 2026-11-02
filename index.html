@@ -1,64 +1,71 @@
+
 const RECRUITMENT_API_URL =
-    "https://mcdonalds-belle-roche.wispbyte.app/candidature";
+  "https://mcdonalds-belle-roche.wispbyte.app/candidature";
 
 const form = document.getElementById("recruitmentForm");
 const result = document.getElementById("recruitmentResult");
 
 if (!form || !result) {
-    console.error("Formulaire ou zone de résultat introuvable.");
+  console.error("Formulaire ou zone de résultat introuvable.");
 } else {
-    const submitButton = form.querySelector('button[type="submit"]');
+  const submitButton = form.querySelector('button[type="submit"]');
 
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-        if (!form.reportValidity()) return;
+    if (!form.reportValidity()) return;
 
-        const data = new FormData(form);
+    const data = new FormData(form);
 
-        const candidature = {
-            prenom: String(data.get("prenom") || "").trim(),
-            nom: String(data.get("nom") || "").trim(),
-            email: String(data.get("email") || "").trim(),
-            poste: String(data.get("poste") || "").trim(),
-            disponibilites: String(data.get("disponibilites") || "").trim(),
-            motivation: String(data.get("motivation") || "").trim()
-        };
+    const candidature = {
+      prenom: String(data.get("prenom") || "").trim(),
+      nom: String(data.get("nom") || "").trim(),
+      email: String(data.get("email") || "").trim(),
+      poste: String(data.get("poste") || "").trim(),
+      disponibilites: String(data.get("disponibilites") || "").trim(),
+      motivation: String(data.get("motivation") || "").trim()
+    };
 
-        submitButton.disabled = true;
-        submitButton.textContent = "Envoi en cours...";
-        result.textContent = "Transmission de votre candidature...";
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Envoi en cours...";
+    }
 
-        try {
-            const response = await fetch(RECRUITMENT_API_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(candidature)
-            });
+    result.textContent = "Transmission de votre candidature...";
 
-            const answer = await response.json().catch(() => ({}));
+    try {
+      const response = await fetch(RECRUITMENT_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(candidature)
+      });
 
-            if (!response.ok) {
-                throw new Error(
-                    answer.error || `Erreur HTTP ${response.status}`
-                );
-            }
+      const answer = await response.json().catch(() => ({}));
 
-            form.reset();
-            result.style.color = "#27633b";
-            result.textContent = "Candidature envoyée avec succès !";
+      if (!response.ok) {
+        throw new Error(
+          answer.error || `Erreur HTTP ${response.status}`
+        );
+      }
 
-        } catch (error) {
-            console.error("Erreur de candidature :", error);
-            result.style.color = "#a33";
-            result.textContent =
-                "Erreur de connexion avec le serveur. Vérifie l'API Wispbyte.";
+      form.reset();
+      result.style.color = "#27633b";
+      result.textContent = "Candidature envoyée avec succès !";
 
-        } finally {
-            submitButton.disabled = false;
-            submitButton.textContent = "Envoyer ma candidature";
-        }
-    });
+    } catch (error) {
+      console.error("Erreur de candidature :", error);
+
+      result.style.color = "#a33";
+      result.textContent =
+        "Erreur de connexion avec le serveur. Vérifie l'API Wispbyte.";
+
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Envoyer ma candidature";
+      }
+    }
+  });
 }
