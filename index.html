@@ -31,6 +31,7 @@ if (!form || !result) {
       submitButton.textContent = "Envoi en cours...";
     }
 
+    result.style.color = "#333";
     result.textContent = "Transmission de votre candidature...";
 
     try {
@@ -50,16 +51,18 @@ if (!form || !result) {
         );
       }
 
-      form.reset();
       result.style.color = "#27633b";
-      result.textContent = "Candidature envoyée avec succès !";
+      result.textContent =
+        "Votre candidature a été envoyée avec succès !";
+
+      form.reset();
 
     } catch (error) {
       console.error("Erreur de candidature :", error);
 
       result.style.color = "#a33";
       result.textContent =
-        "Erreur de connexion avec le serveur. Vérifie l'API Wispbyte.";
+        error.message || "Impossible de contacter le serveur.";
 
     } finally {
       if (submitButton) {
