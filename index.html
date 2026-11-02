@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>McDonald's de Belleroche</title>
+  <meta name="description" content="Menu, horaires et recrutement du McDonald's de Belleroche.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="#accueil">McDonald's <span>Belleroche</span></a>
+  <nav aria-label="Navigation principale">
+    <a href="#menu">Le menu</a>
+    <a href="#recrutement" class="pill">Postuler</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="accueil">
+    <svg class="arches" viewBox="0 0 260 200" aria-hidden="true" focusable="false">
+      <path pathLength="1" d="M30 190V95A50 50 0 0 1 130 95V190M130 95A50 50 0 0 1 230 95V190"/>
+    </svg>
+    <div class="hero-text">
+      <h1>Big Mac, frites dorées, et une équipe qui recrute.</h1>
+      <p>Le restaurant de Belleroche est ouvert tous les jours. Viens manger, ou viens travailler avec nous.</p>
+      <div class="actions">
+        <a class="btn" href="#menu">Voir le menu</a>
+        <a class="btn ghost" href="#recrutement">Rejoindre l'équipe</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="strip" aria-label="Infos pratiques">
+    <dl>
+      <div><dt>Horaires</dt><dd>Tous les jours, 10 h à 23 h</dd></div>
+      <div><dt>Adresse</dt><dd>Belleroche</dd></div>
+      <div><dt>Commande</dt><dd>Sur place ou à emporter</dd></div>
+    </dl>
+  </section>
+
+  <section class="menu" id="menu">
+    <h2>Le menu</h2>
+    <div class="panels">
+      <article class="panel p-white">
+        <h3>Burgers</h3>
+        <ul>
+          <li><span>Big Mac</span><b>5,90 €</b></li>
+          <li><span>Royal Deluxe</span><b>6,40 €</b></li>
+          <li><span>McChicken</span><b>5,20 €</b></li>
+          <li><span>Cheeseburger</span><b>2,20 €</b></li>
+        </ul>
+      </article>
+      <article class="panel p-yellow">
+        <h3>Frites et nuggets</h3>
+        <ul>
+          <li><span>Frites moyennes</span><b>2,90 €</b></li>
+          <li><span>Nuggets x6</span><b>4,50 €</b></li>
+          <li><span>Potatoes</span><b>3,10 €</b></li>
+        </ul>
+      </article>
+      <article class="panel p-red">
+        <h3>Boissons et desserts</h3>
+        <ul>
+          <li><span>Coca-Cola</span><b>2,50 €</b></li>
+          <li><span>McFlurry</span><b>3,80 €</b></li>
+          <li><span>Sundae</span><b>2,60 €</b></li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="recruit" id="recrutement">
+    <div class="recruit-intro">
+      <h2>Ton premier service commence ici.</h2>
+      <p>Remplis le formulaire en deux minutes. Ta candidature arrive directement à la direction, qui te répond par email.</p>
+      <ul class="perks">
+        <li>Horaires adaptés à tes cours</li>
+        <li>Formation payée dès le premier jour</li>
+        <li>Repas offert pendant ton service</li>
+      </ul>
+    </div>
+
+    <form id="recruitmentForm" novalidate>
+      <div class="row">
+        <label>Prénom
+          <input type="text" name="prenom" maxlength="50" autocomplete="given-name" required>
+        </label>
+        <label>Nom
+          <input type="text" name="nom" maxlength="60" autocomplete="family-name" required>
+        </label>
+      </div>
+
+      <label>Adresse email
+        <input type="email" name="email" maxlength="120" autocomplete="email" required>
+      </label>
+
+      <label>Poste souhaité
+        <select name="poste" required>
+          <option value="">Choisir un poste</option>
+          <option>Équipier polyvalent</option>
+          <option>Caissier</option>
+          <option>Cuisinier</option>
+          <option>Équipier McDrive</option>
+          <option>Manager</option>
+        </select>
+      </label>
+
+      <label>Disponibilités
+        <input type="text" name="disponibilites" maxlength="250" placeholder="Ex. : soirs et week-ends" required>
+      </label>
+
+      <label>Pourquoi veux-tu travailler chez nous ?
+        <textarea name="motivation" rows="5" maxlength="1800" required></textarea>
+      </label>
+
+      <button type="submit">Envoyer ma candidature</button>
+      <p id="recruitmentResult" role="status"></p>
+    </form>
+  </section>
+</main>
+
+<footer>
+  <p>© McDonald's de Belleroche</p>
+  <a href="#accueil">Retour en haut</a>
+</footer>
+
+<script src="candidature.js" defer></script>
+</body>
+</html>
