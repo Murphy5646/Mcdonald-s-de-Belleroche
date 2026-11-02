@@ -13,4 +13,4 @@ Toute utilisation non autorisée pourra faire l'objet d'une demande de
 retrait (notamment auprès de GitHub et de l'hébergeur) et d'une
 réclamation.
 
-Contact : [ton email ou pseudo Discord ici]
+Contact : discord : mat_50896, gmail : matthysytnova@gmail.com
