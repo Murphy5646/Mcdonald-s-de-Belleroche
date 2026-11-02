@@ -1,36 +1,125 @@
-const RECRUITMENT_API_URL = "https://mcdonalds-belle-roche.wispbyte.app/candidature";
+"use strict";
 
-const form = document.getElementById("recruitmentForm");
-const result = document.getElementById("recruitmentResult");
+// ======================================
+// CONFIGURATION
+// ======================================
+const RECRUITMENT_API_URL =
+  "https://mcdonalds-belle-roche.wispbyte.app/candidature";
 
-if (!form || !result) {
-  console.error("Formulaire ou zone de résultat introuvable.");
-} else {
-  const submitButton = form.querySelector('button[type="submit"]');
+const REQUEST_TIMEOUT_MS = 15000;
+
+const FIELDS = [
+  "prenom",
+  "nom",
+  "email",
+  "poste",
+  "disponibilites",
+  "motivation",
+];
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const STATUS_COLORS = {
+  info: "#333",
+  success: "#27633b",
+  error: "#a33",
+};
+
+// ======================================
+// INITIALISATION
+// ======================================
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("recruitmentForm");
+  const result = document.getElementById("recruitmentResult");
+
+  if (!form || !result) {
+    console.error("Erreur : formulaire ou zone de résultat introuvable.");
+    return;
+  }
+
+  const submitButton = form.querySelector(
+    'button[type="submit"], input[type="submit"]'
+  );
+
+  if (!submitButton) {
+    console.error("Erreur : bouton d'envoi introuvable.");
+    return;
+  }
+
+  // Accessibilité : les lecteurs d'écran annoncent les changements de statut
   result.setAttribute("aria-live", "polite");
+
+  // ======================================
+  // OUTILS
+  // ======================================
+  const isInput = submitButton.tagName === "INPUT";
+  const defaultLabel = isInput ? submitButton.value : submitButton.textContent;
+
+  const setButtonLabel = (text) => {
+    if (isInput) submitButton.value = text;
+    else submitButton.textContent = text;
+  };
 
   const setStatus = (message, type = "info") => {
     result.textContent = message;
-    result.dataset.status = type; // à styliser en CSS : [data-status="error"] { color: #a33; }
+    result.dataset.status = type; // stylable en CSS : [data-status="error"] { ... }
+    result.style.color = STATUS_COLORS[type] || STATUS_COLORS.info;
   };
 
+  const setLoading = (loading) => {
+    submitButton.disabled = loading;
+    setButtonLabel(loading ? "Envoi en cours..." : defaultLabel);
+  };
+
+  const readCandidature = () => {
+    const data = new FormData(form);
+    return Object.fromEntries(
+      FIELDS.map((key) => [key, String(data.get(key) || "").trim()])
+    );
+  };
+
+  const validate = (candidature) => {
+    if (FIELDS.some((key) => !candidature[key])) {
+      return "Merci de remplir tous les champs obligatoires.";
+    }
+    if (!EMAIL_REGEX.test(candidature.email)) {
+      return "Merci de renseigner une adresse email valide.";
+    }
+    return null;
+  };
+
+  const friendlyError = (error) => {
+    if (error.name === "AbortError") {
+      return "Le serveur met trop de temps à répondre. Réessayez dans un instant.";
+    }
+    if (error instanceof TypeError) {
+      return "Impossible de contacter le serveur. Vérifiez votre connexion et réessayez.";
+    }
+    return error.userMessage || "Une erreur est survenue. Réessayez plus tard.";
+  };
+
+  // ======================================
+  // ENVOI DU FORMULAIRE
+  // ======================================
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    if (submitButton.disabled) return; // anti double envoi
     if (!form.reportValidity()) return;
 
-    const data = new FormData(form);
-    const candidature = Object.fromEntries(
-      ["prenom", "nom", "email", "poste", "disponibilites", "motivation"].map(
-        (key) => [key, String(data.get(key) || "").trim()]
-      )
-    );
+    const candidature = readCandidature();
 
-    submitButton.disabled = true;
-    submitButton.textContent = "Envoi en cours...";
-    setStatus("Transmission de votre candidature...");
+    const validationError = validate(candidature);
+    if (validationError) {
+      setStatus(validationError, "error");
+      return;
+    }
+
+    setLoading(true);
+    setStatus("Transmission de votre candidature...", "info");
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
     try {
       const response = await fetch(RECRUITMENT_API_URL, {
@@ -41,25 +130,33 @@ if (!form || !result) {
       });
 
       const answer = await response.json().catch(() => ({}));
+
       if (!response.ok) {
-        throw new Error(answer.error || `Erreur HTTP ${response.status}`);
+        const error = new Error(answer.error || `Erreur HTTP ${response.status}`);
+        // Message propre pour le candidat, détail technique gardé pour la console
+        error.userMessage =
+          response.status >= 500
+            ? "Le serveur a rencontré un problème. Réessayez plus tard."
+            : answer.error || "Votre candidature n'a pas pu être envoyée.";
+        throw error;
       }
 
-      setStatus("Votre candidature a été envoyée avec succès !", "success");
+      // Échec explicite annoncé par l'API malgré un code 200
+      if (answer.success === false) {
+        const error = new Error(answer.message || "Candidature non confirmée.");
+        error.userMessage =
+          answer.message || "La candidature n'a pas été confirmée.";
+        throw error;
+      }
+
       form.reset();
+      setStatus("Votre candidature a été envoyée avec succès !", "success");
     } catch (error) {
-      console.error("Erreur de candidature :", error);
-      const message =
-        error.name === "AbortError"
-          ? "Le serveur met trop de temps à répondre. Réessayez dans un instant."
-          : error instanceof TypeError
-          ? "Impossible de contacter le serveur. Vérifiez votre connexion."
-          : error.message;
-      setStatus(message, "error");
+      console.error("Erreur lors de l'envoi de la candidature :", error);
+      setStatus(friendlyError(error), "error");
     } finally {
-      clearTimeout(timeout);
-      submitButton.disabled = false;
-      submitButton.textContent = "Envoyer ma candidature";
+      clearTimeout(timeoutId);
+      setLoading(false);
     }
   });
-}
+});
