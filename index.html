@@ -1,259 +1,64 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>McDonald's de Belleroche</title>
-<style>
-:root{--red:#b5121b;--gold:#ffc72c;--dark:#202020;--light:#fff8e9}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:Arial,sans-serif;color:var(--dark)}
-a{text-decoration:none;color:inherit}
-.top{background:var(--red);color:white;text-align:center;padding:10px}
-header{position:sticky;top:0;background:white;z-index:5;box-shadow:0 2px 10px #0002}
-nav{max-width:1100px;margin:auto;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:20px}
-.logo{font-size:20px;font-weight:bold;color:var(--red)}
-.links{display:flex;gap:22px;font-weight:bold;font-size:14px}
-.links a:hover{color:var(--red)}
-.btn{display:inline-block;background:var(--red);color:white;padding:13px 20px;border:0;border-radius:7px;font-weight:bold;cursor:pointer}
-.btn:hover{background:#850d14}
-.hero{min-height:530px;display:flex;align-items:center;color:white;background:linear-gradient(90deg,#000c,#0004),url('https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1800&q=85') center/cover}
-.hero div{max-width:1100px;margin:auto;padding:60px 22px;width:100%}
-.hero h1{font-size:clamp(40px,7vw,70px);max-width:700px;margin:15px 0}
-.hero p{font-size:18px;line-height:1.6;max-width:550px}
-.gold{background:var(--gold);color:#222;margin-right:8px}
-section{padding:75px 22px}
-.container{max-width:1100px;margin:auto}
-.heading{text-align:center;max-width:700px;margin:0 auto 35px}
-.heading h2{font-size:38px;margin:0 0 12px}
-.heading p,.card p,.menu-card p,.contact p{color:#666;line-height:1.6}
-.cards,.menu,.contacts{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.card,.contact{padding:25px;border:1px solid #eee;border-radius:12px}
-.card h3,.menu-card h3{margin-bottom:8px}
-.menu-section{background:var(--light)}
-.menu-card{background:white;border-radius:12px;overflow:hidden}
-.menu-card img{width:100%;height:190px;object-fit:cover}
-.menu-card div{padding:18px}
-.recruit{background:var(--red);color:white}
-.recruit-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:40px;align-items:start}
-.recruit h2{font-size:42px}
-.recruit-copy p,.recruit-copy li{line-height:1.7;color:#ffe6e6}
-form{background:white;color:#222;padding:26px;border-radius:12px}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.field{display:flex;flex-direction:column;gap:7px}
-.field.full{grid-column:1/-1}
-label{font-size:13px;font-weight:bold}
-input,select,textarea{padding:12px;border:1px solid #ccc;border-radius:6px;width:100%;font:inherit}
-textarea{min-height:120px;resize:vertical}
-.note{font-size:12px;color:#666;line-height:1.5}
-form button{width:100%;margin-top:10px}
-#recruitmentResult{margin-top:12px;font-weight:bold;min-height:20px}
-.contact{background:#f7f7f7}
-footer{background:#191919;color:white;padding:28px 20px;text-align:center;font-size:13px;line-height:1.7}
-@media(max-width:750px){
- nav{align-items:flex-start;flex-direction:column}
- .links{flex-wrap:wrap;gap:13px}
- .cards,.menu,.contacts,.recruit-layout{grid-template-columns:1fr}
- .fields{grid-template-columns:1fr}
- .field.full{grid-column:auto}
- .hero{min-height:460px}
- section{padding:55px 18px}
-}
-</style>
-</head>
-<body>
-
-<div class="top">Bienvenue au restaurant McDonald's de Belleroche</div>
-
-<header>
-<nav>
-  <a class="logo" href="#accueil">McDonald's de Belleroche</a>
-  <div class="links">
-    <a href="#accueil">Accueil</a>
-    <a href="#restaurant">Restaurant</a>
-    <a href="#carte">Notre carte</a>
-    <a href="#recrutement">Recrutement</a>
-    <a href="#contact">Contact</a>
-  </div>
-</nav>
-</header>
-
-<main>
-<section class="hero" id="accueil">
-<div>
-  <p style="color:#ffc72c;font-weight:bold">MCDONALD'S DE BELLEROCHE</p>
-  <h1>Un moment gourmand, une équipe qui rassemble.</h1>
-  <p>Bienvenue sur le site de notre restaurant. Découvrez notre établissement et rejoignez notre équipe.</p>
-  <a class="btn gold" href="#carte">Découvrir la carte</a>
-  <a class="btn" href="#recrutement">Nous rejoindre</a>
-</div>
-</section>
-
-<section id="restaurant">
-<div class="container">
-  <div class="heading">
-    <h2>Bienvenue chez nous</h2>
-    <p>Un restaurant convivial où l'accueil, le service et le travail d'équipe sont au cœur de chaque journée.</p>
-  </div>
-  <div class="cards">
-    <article class="card"><h3>🍔 Un moment gourmand</h3><p>Retrouvez un univers de restauration rapide et des produits appréciés de tous.</p></article>
-    <article class="card"><h3>🤝 Une équipe soudée</h3><p>Chaque membre contribue au bon fonctionnement du restaurant.</p></article>
-    <article class="card"><h3>⭐ Le sens du service</h3><p>Écoute, respect et efficacité sont au cœur de notre accueil.</p></article>
-  </div>
-</div>
-</section>
-
-<section class="menu-section" id="carte">
-<div class="container">
-  <div class="heading">
-    <h2>Notre univers</h2>
-    <p>Quelques incontournables de l'univers McDonald's. Les produits et disponibilités peuvent varier.</p>
-  </div>
-  <div class="menu">
-    <article class="menu-card">
-      <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80" alt="Burger">
-      <div><h3>Les burgers</h3><p>Une sélection de burgers pour les petites et grandes faims.</p></div>
-    </article>
-    <article class="menu-card">
-      <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=900&q=80" alt="Frites">
-      <div><h3>Les accompagnements</h3><p>Des accompagnements pour compléter votre repas.</p></div>
-    </article>
-    <article class="menu-card">
-      <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=900&q=80" alt="Dessert">
-      <div><h3>Les desserts</h3><p>Une touche sucrée pour terminer votre repas.</p></div>
-    </article>
-  </div>
-</div>
-</section>
-
-<section class="recruit" id="recrutement">
-<div class="container recruit-layout">
-  <div class="recruit-copy">
-    <p style="color:#ffc72c;font-weight:bold">RECRUTEMENT</p>
-    <h2>Envie de rejoindre l'équipe ?</h2>
-    <p>Tu souhaites rejoindre le restaurant McDonald's de Belleroche ? Présente-nous ta candidature grâce au formulaire. Elle sera transmise directement au responsable sur Discord.</p>
-    <ul>
-      <li>Présente-toi clairement</li>
-      <li>Indique le poste souhaité</li>
-      <li>Explique tes motivations et tes disponibilités</li>
-    </ul>
-  </div>
-
-  <form id="recruitmentForm">
-    <div class="fields">
-      <div class="field">
-        <label for="prenom">Prénom *</label>
-        <input id="prenom" name="prenom" maxlength="50" required>
-      </div>
-      <div class="field">
-        <label for="nom">Nom *</label>
-        <input id="nom" name="nom" maxlength="60" required>
-      </div>
-      <div class="field full">
-        <label for="email">Adresse e-mail *</label>
-        <input id="email" name="email" type="email" maxlength="120" required>
-      </div>
-      <div class="field full">
-        <label for="poste">Poste souhaité *</label>
-        <select id="poste" name="poste" required>
-          <option value="">Choisir un poste</option>
-          <option>Équipier polyvalent</option>
-          <option>Hôte / Hôtesse d'accueil</option>
-          <option>Formateur</option>
-          <option>Manager</option>
-          <option>Autre</option>
-        </select>
-      </div>
-      <div class="field full">
-        <label for="disponibilites">Disponibilités *</label>
-        <input id="disponibilites" name="disponibilites" maxlength="250" placeholder="Ex. : soirs et week-ends" required>
-      </div>
-      <div class="field full">
-        <label for="motivation">Motivations *</label>
-        <textarea id="motivation" name="motivation" maxlength="1800" placeholder="Présente tes motivations..." required></textarea>
-      </div>
-    </div>
-    <p class="note">Les informations saisies servent uniquement au traitement de cette candidature dans le cadre du projet.</p>
-    <button class="btn" type="submit">Envoyer ma candidature</button>
-    <div id="recruitmentResult" role="status" aria-live="polite"></div>
-  </form>
-</div>
-</section>
-
-<section id="contact">
-<div class="container">
-  <div class="heading">
-    <h2>Nous contacter</h2>
-    <p>Une question sur le restaurant ou le recrutement ? Utilise les informations communiquées par l'équipe.</p>
-  </div>
-  <div class="contacts">
-    <article class="contact"><h3>📍 Restaurant</h3><p>McDonald's de Belleroche<br>Adresse à compléter</p></article>
-    <article class="contact"><h3>✉️ Recrutement</h3><p>Utilise le formulaire de candidature pour contacter le responsable.</p></article>
-    <article class="contact"><h3>💬 Communauté</h3><p>Retrouve les actualités sur le serveur Discord du projet.</p></article>
-  </div>
-</div>
-</section>
-</main>
-
-<footer>
-<strong>McDonald's de Belleroche</strong><br>
-Projet indépendant de présentation / roleplay, non affilié à McDonald's Corporation.<br>
-© 2026
-</footer>
-
-<script>
 const RECRUITMENT_API_URL =
-  "https://mcdonalds-belle-roche.wispbyte.app/candidature";
+    "https://mcdonalds-belle-roche.wispbyte.app/candidature";
 
 const form = document.getElementById("recruitmentForm");
 const result = document.getElementById("recruitmentResult");
-const submitButton = form.querySelector('button[type="submit"]');
 
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  if (!form.reportValidity()) return;
+if (!form || !result) {
+    console.error("Formulaire ou zone de résultat introuvable.");
+} else {
+    const submitButton = form.querySelector('button[type="submit"]');
 
-  const data = new FormData(form);
-  const candidature = {
-    prenom: String(data.get("prenom") || "").trim(),
-    nom: String(data.get("nom") || "").trim(),
-    email: String(data.get("email") || "").trim(),
-    poste: String(data.get("poste") || "").trim(),
-    disponibilites: String(data.get("disponibilites") || "").trim(),
-    motivation: String(data.get("motivation") || "").trim()
-  };
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-  submitButton.disabled = true;
-  submitButton.textContent = "Envoi en cours...";
-  result.style.color = "#555";
-  result.textContent = "Transmission de votre candidature...";
+        if (!form.reportValidity()) return;
 
-  try {
-    const response = await fetch(RECRUITMENT_API_URL, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(candidature)
+        const data = new FormData(form);
+
+        const candidature = {
+            prenom: String(data.get("prenom") || "").trim(),
+            nom: String(data.get("nom") || "").trim(),
+            email: String(data.get("email") || "").trim(),
+            poste: String(data.get("poste") || "").trim(),
+            disponibilites: String(data.get("disponibilites") || "").trim(),
+            motivation: String(data.get("motivation") || "").trim()
+        };
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Envoi en cours...";
+        result.textContent = "Transmission de votre candidature...";
+
+        try {
+            const response = await fetch(RECRUITMENT_API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(candidature)
+            });
+
+            const answer = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(
+                    answer.error || `Erreur HTTP ${response.status}`
+                );
+            }
+
+            form.reset();
+            result.style.color = "#27633b";
+            result.textContent = "Candidature envoyée avec succès !";
+
+        } catch (error) {
+            console.error("Erreur de candidature :", error);
+            result.style.color = "#a33";
+            result.textContent =
+                "Erreur de connexion avec le serveur. Vérifie l'API Wispbyte.";
+
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = "Envoyer ma candidature";
+        }
     });
-
-    const answer = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      throw new Error(answer.error || "Erreur lors de l'envoi.");
-    }
-
-    form.reset();
-    result.style.color = "#27633b";
-    result.textContent = "Candidature envoyée avec succès !";
-  } catch (error) {
-    console.error(error);
-    result.style.color = "#a33";
-    result.textContent =
-      "Impossible d'envoyer la candidature. Vérifie la connexion à l'API.";
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = "Envoyer ma candidature";
-  }
-});
-</script>
-</body>
-</html>
+}
